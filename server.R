@@ -14,7 +14,7 @@ dex <- read_csv("data/pokemon.csv") |>
   )
 
 # function for drawing lines on Plotly graphs
-vline <- function(x = 0, color = "green") {
+vline <- function(x = 0) {
   list(
     type = "line",
     y0 = 0,
@@ -22,7 +22,7 @@ vline <- function(x = 0, color = "green") {
     yref = "paper",
     x0 = x,
     x1 = x,
-    line = list(color = color)
+    line = list(color = "black")
   )
 }
 
@@ -37,12 +37,7 @@ plt_histogram <- function(data, column, sel_entry) {
     layout(
       dragmode = FALSE,
       margin = list(l = 0, r = 0, t = 0, b = 0),
-      shapes = list(
-        vline(
-          pull(sel_entry(), !!sym(column)),
-          color = "black"
-        )
-      ),
+      shapes = list(vline(x = pull(sel_entry(), !!sym(column)))),
       xaxis = list(title = ""),
       yaxis = list(showticklabels = FALSE),
       hovermode = "x unified"
@@ -166,6 +161,21 @@ server <- function(input, output, session) {
       filter(label_name == input$filter_label)
   })
   
+  # change the navbar text color with Pokemon type
+  shiny::observe({
+    shiny::req(sel_entry()$color_1)
+    new_color <- sel_entry()$color_1
+    
+    session$setCurrentTheme(
+      bs_theme(
+        version = 5,
+        bootswatch = "flatly",
+        primary = new_color,
+        success = "#dfe6e5"
+      )
+    )
+  })
+    
   ######## INTERESTING TRICK ALERT #########
   # This code prevents me from manually assigning each Pokemon
   # stat by hand into the output dictionary. I select the relevant columns,
@@ -196,8 +206,12 @@ server <- function(input, output, session) {
   
   # full PokeDex tab
   output$full_data <- renderDT({
-    dex |>
-      select(-c(url_image, url_icon, label_name, species_id)) |>
+    sel_data() |>
+      select(-label_name) |>
+      mutate(
+        egg_group_1 = str_to_title(egg_group_1),
+        egg_group_2 = str_to_title(egg_group_2)
+      ) |>
       rename_with(~ str_replace_all(., "_", " ")) |>
       rename_with(~ str_to_title(.)) |>
       datatable(options = list(pageLength = 25))

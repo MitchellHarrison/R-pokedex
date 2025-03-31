@@ -8,10 +8,16 @@ APP_TITLE <- "Mitch's Interactive Pokedex!"
 REPO_URL <- "https://github.com/MitchellHarrison/R-pokedex"
 dex <- read_csv("data/pokemon.csv") |>
   distinct(species_id, .keep_all = TRUE)
+starting_color <- dex |>
+  slice(1) |>
+  pull(color_1)
 
 ui <- page_navbar(
   title = APP_TITLE,
-  theme = bs_theme(version = 5, bootswatch = "flatly"),
+  theme = bs_theme(
+    version = 5, 
+    bootswatch = "flatly"
+  ),
   sidebar = sidebar(
     width = "18%",
     
