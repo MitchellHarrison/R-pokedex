@@ -165,13 +165,18 @@ server <- function(input, output, session) {
   shiny::observe({
     shiny::req(sel_entry()$color_1)
     new_color <- sel_entry()$color_1
+    new_highlight <- sel_entry()$color_2
+    
+    if (is.na(new_highlight)) {
+      new_highlight <- "#dfe6e5"
+    }
     
     session$setCurrentTheme(
       bs_theme(
         version = 5,
         bootswatch = "flatly",
         primary = new_color,
-        success = "#dfe6e5"
+        success = new_highlight
       )
     )
   })

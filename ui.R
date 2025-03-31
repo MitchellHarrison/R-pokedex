@@ -6,11 +6,25 @@ library(tidyverse)
 
 APP_TITLE <- "Mitch's Interactive Pokedex!"
 REPO_URL <- "https://github.com/MitchellHarrison/R-pokedex"
+SHOUTOUT_TEXT <- c(paste(
+  "Hello, everyone! This is a PokeDex built entirely with R Shiny and Plotly,",
+  "and it's my humble entry for this week's TidyTuesday. If you want to see",
+  "its code, click the 🤍 at the top-right corner, which will take you to this",
+  "project's Github repo. If you have any specific questions, feel free",
+  "to connect with me on"
+  ), # Linkedin
+  "or", # Discord
+  "Talk soon!"
+)
+
+# read_data and set starting color
 dex <- read_csv("data/pokemon.csv") |>
   distinct(species_id, .keep_all = TRUE)
 starting_color <- dex |>
   slice(1) |>
   pull(color_1)
+
+######## START OF UI ########
 
 ui <- page_navbar(
   title = APP_TITLE,
@@ -112,7 +126,25 @@ ui <- page_navbar(
     fluidRow(
       column(
         width = 3,
-        uiOutput("entry_image")
+        uiOutput("entry_image"),
+        br(),
+        br(),
+        br(),
+        card(
+          p(
+            "Hello everyone! This is a PokeDex built entirely with R Shiny",
+            "and Plotly. It's my humble entry into this week's TidyTuesday!",
+            "If you want to see the code that built this PokeDex, click",
+            a("here", href = "https://github.com/MitchellHarrison/R-pokedex"),
+            "or on the 🤍 at the top-right corner, which will take you to the",
+            "Github repo. If you have any questions, feel free to connect with",
+            "me on",
+            a("LinkedIn", href = "https://linkedin.com/in/harrisonme"),
+            "or on my",
+            a("Discord", href = "https://discord.gg/vF6W2bdKFH"),
+            "server. Talk soon!"
+          )
+        )
       ),
       
       column(
