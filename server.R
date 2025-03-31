@@ -2,7 +2,7 @@ library(plotly)
 library(shiny)
 library(tidyverse)
 
-dex <- readr::read_csv("../data/pokemon.csv") |>
+dex <- read_csv("data/pokemon.csv") |>
   distinct(species_id, .keep_all = TRUE) |>
   mutate(
     label_name = paste(species_id, "-", str_to_title(pokemon)),

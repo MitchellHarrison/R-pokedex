@@ -5,7 +5,7 @@ library(shiny)
 library(tidyverse)
 
 APP_TITLE <- "Mitch's Interactive Pokedex"
-dex <- read_csv("../data/pokemon.csv") |>
+dex <- read_csv("data/pokemon.csv") |>
   distinct(species_id, .keep_all = TRUE)
 
 ui <- page_navbar(
