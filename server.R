@@ -207,7 +207,7 @@ server <- function(input, output, session) {
   # full PokeDex tab
   output$full_data <- renderDT({
     sel_data() |>
-      select(-label_name) |>
+      select(-c(id, label_name)) |>
       mutate(
         egg_group_1 = str_to_title(egg_group_1),
         egg_group_2 = str_to_title(egg_group_2)
